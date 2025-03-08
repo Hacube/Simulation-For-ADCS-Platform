@@ -8,7 +8,27 @@ addpath("Functions");
 
 % Constants
 I     = eye(3);   
-tspan = 200;    % sec
+tspan = 60;    % sec
+
+%% Control Law Gains - P2
+
+% Control gains
+zeta = 0.70; % damping coefficient
+t_s  = 70;   % sec, settling time
+
+% w_n = 4.4/(t_s*zeta);
+w_n  = log(0.02*sqrt(1-zeta^2))/-zeta/t_s;
+
+% beta = atan(sqrt(1-zeta^2)/zeta);
+% tr = (pi-beta)/w_n/sqrt(1-zeta^2);
+
+% Extend to each Axis
+k_p = (2*J.*w_n^2);    % kg*m^2 / s^2 = N-m
+k_d = (J.*2*zeta*w_n); % kg*m^2 / s^2 = N-m
+
+% Initial no torque                   
+T = [0;0;0]; % N-m
+
 
 %% Simulate - P2
 
