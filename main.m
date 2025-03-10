@@ -87,23 +87,38 @@ k_p = (2*J.*w_n^2);    % kg*m^2 / s^2 = N-m
 k_d = (J.*2*zeta*w_n); % kg*m^2 / s^2 = N-m
 
 % Initial no torque                   
-T_i = [0;0;0]; % N-m
+T = [0;0;0]; % N-m
+
+%% Print Output
+
+disp(' ')
+disp("---Final Project Sim Inputs---")
+
+fprintf('The allignement A_s to each body axis is: \n');
+disp(A_s)
+fprintf('The allignement A_t to each body axis is: \n');
+disp(A_t)
+fprintf('The allignement A_g to each body axis is: \n');
+disp(A_g)
+
+fprintf('The inertia of the body I_b is: \n');
+disp(I_b)
+fprintf('The inertia of the spacecraft is: \n');
+disp(J)
+
+fprintf('The control gain k_p extended to each axis is: \n');
+disp(k_p)
+fprintf('The control gain k_d extended to each axis is: \n');
+disp(k_d)
 
 %% Simulate - P2
 
-out = sim('platfor_model.slx');
+out = sim('platform_model.slx');
 
 %% Plot Results - P2
 
 figure()
-subplot(2,2,1); hold on;
-plot(out.tout, out.q_b_ECI(:,2), out.tout, out.q_b_ECI(:,3), out.tout, out.q_b_ECI(:,4), out.tout, out.q_b_ECI(:,5));
-title('Quaternions');
-xlabel('Time (sec)'); ylabel('Quat Angles');
-legend("\epsilon1", "\epsilon2", "\epsilon3", "\eta");
-hold off; grid on;
-
-subplot(2,2,2); hold on;
+subplot(2,1,1); hold on;
 plot(out.tout, out.E_b_ECI(:,2),out.tout, out.E_b_ECI(:,3),out.tout, out.E_b_ECI(:,4));
 title('Euler Angles');
 xlabel('Time (sec)'); ylabel('Angle (deg)');
@@ -119,9 +134,9 @@ hold off; grid on;
 
 figure()
 hold on;
-plot(out.tout, out.Omega(:,2), out.tout, out.Omega(:,3), out.tout, out.Omega(:,4), out.tout, out.Omega(:,5));
+plot(out.tout, out.Omega(:,2), out.tout, out.Omega(:,3), out.tout, out.Omega(:,4));
 title('Wheel Velocities in Spin Direction');
 ylabel('Angular Velocity (rad/sec)');
 xlabel('Time (sec)'); 
-legend("\Omega1", "\Omega2", "\Omega3","\Omega4",Location="best");
+legend("\Omega1", "\Omega2", "\Omega3",Location="best");
 hold off; grid on;
