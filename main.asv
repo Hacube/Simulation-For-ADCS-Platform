@@ -12,25 +12,45 @@ tspan = 60;    % sec
 
 %% Initial Conditions
 
-% Initial inertia - Given (Assumed not with wheels)
+% Initial inertia - Given (Assumed to be with wheels)
 J_pl  = [0.1614 -0.0015 0.0041;
         -0.0015 0.1547 -0.0001;
         0.0041 -0.0001 0.2828];
 
 % Initial Euler angles
-E_b_0 = [0; 0; 0]; % radians
+E_b_0 = C2EulerAngles(C_b_ECI_0);
 
 % Initial angular velocity
-w_b_0 = [0; 0; 0]; % rad/s
+w_b_0 = [0.5; -0.2; -3]*10e-5; % rad/s
 
-%% Rxn Wheel Characteristics
+%% Control Law Gains - P2
+
+% Control gains
+zeta = 0.70; % damping coefficient
+t_s  = 70;   % sec, settling time
+
+% w_n = 4.4/(t_s*zeta);
+w_n  = log(0.02*sqrt(1-zeta^2))/-zeta/t_s;
+
+% beta = atan(sqrt(1-zeta^2)/zeta);
+% tr = (pi-beta)/w_n/sqrt(1-zeta^2);
+
+% Extend to each Axis
+k_p = (2*J.*w_n^2);    % kg*m^2 / s^2 = N-m
+k_d = (J.*2*zeta*w_n); % kg*m^2 / s^2 = N-m
+
+% Initial no torque                   
+T_i = [0;0;0]; % N-m
+
+
+%% Rxn Wheel Characteristics - P2
 
 % 3-axis
 num_w  = 3;    % number of wheels
-m_w    = .2;   % kg
+m_w    = 2;    % kg
 radi_w = 0.08; % m
 hei_w  = 0.02; % m
-pos_w  = 0.4;  % m, distance from bus center
+pos_w  = 0.5;  % m, distance from bus center
 
 % Rxn wheel inertia
 Inrt_s = 0.5*m_w*radi_w^2;                       % kg*m^2, inertia
@@ -67,27 +87,9 @@ I_b_w_2 = m_w*vectCross(pos_b_w(:,2))*vectCross(pos_b_w(:,2));
 I_b_w_3 = m_w*vectCross(pos_b_w(:,3))*vectCross(pos_b_w(:,3));
 I_b_w_4 = m_w*vectCross(pos_b_w(:,4))*vectCross(pos_b_w(:,4));
 
-I_b = J_pl - I_b_w_1 - I_b_w_2 - I_b_w_3 - I_b_w_4;
+I_b = J_platform - I_b_w_1 - I_b_w_2 - I_b_w_3 - I_b_w_4;
 J   = I_b + A_s*Inrt_s*A_s' + A_t*Inrt_t*A_t' + A_g*Inrt_g*A_g';
 
-%% Control Law Gains
-
-% Control gains
-zeta = 0.70; % damping coefficient
-t_s  = 70;   % sec, settling time
-
-% w_n = 4.4/(t_s*zeta);
-w_n  = log(0.02*sqrt(1-zeta^2))/-zeta/t_s;
-
-% beta = atan(sqrt(1-zeta^2)/zeta);
-% tr = (pi-beta)/w_n/sqrt(1-zeta^2);
-
-% Extend to each Axis
-k_p = (2*J.*w_n^2);    % kg*m^2 / s^2 = N-m
-k_d = (J.*2*zeta*w_n); % kg*m^2 / s^2 = N-m
-
-% Initial no torque                   
-T_i = [0;0;0]; % N-m
 
 %% Simulate - P2
 
