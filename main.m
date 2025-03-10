@@ -74,7 +74,7 @@ J   = I_b + A_s*Inrt_s*A_s' + A_t*Inrt_t*A_t' + A_g*Inrt_g*A_g';
 
 % Control gains
 zeta = 0.70; % damping coefficient
-t_s  = 70;   % sec, settling time
+t_s  = 10;   % sec, settling time
 
 % w_n = 4.4/(t_s*zeta);
 w_n  = log(0.02*sqrt(1-zeta^2))/-zeta/t_s;
@@ -118,25 +118,23 @@ out = sim('platform_model.slx');
 %% Plot Results - P2
 
 figure()
-subplot(2,1,1); hold on;
+subplot(3,1,1); hold on;
 plot(out.tout, out.E_b_ECI(:,2),out.tout, out.E_b_ECI(:,3),out.tout, out.E_b_ECI(:,4));
-title('Euler Angles');
-xlabel('Time (sec)'); ylabel('Angle (deg)');
-legend("\phi", "\theta", "\psi");
+title('Euler Angles'); 
+ylabel('Angle (deg)');
+legend("\phi", "\theta", "\psi",Location="eastoutside");
 hold off; grid on; 
 
-subplot(2,1,2); hold on;
+subplot(3,1,2); hold on;
 plot(out.tout, out.w_b_ECI(:,2), out.tout, out.w_b_ECI(:,3), out.tout, out.w_b_ECI(:,4));
 title('Angular Velocities');
-xlabel('Time (sec)'); ylabel('Angular Velocity (rad/sec)');
-legend("\omegax", "\omegay", "\omegaz");
+ylabel('Angular Velocity (rad/sec)');
+legend("\omegax", "\omegay", "\omegaz",Location="eastoutside");
 hold off; grid on;
 
-figure()
-hold on;
+subplot(3,1,3); hold on;
 plot(out.tout, out.Omega(:,2), out.tout, out.Omega(:,3), out.tout, out.Omega(:,4));
 title('Wheel Velocities in Spin Direction');
-ylabel('Angular Velocity (rad/sec)');
-xlabel('Time (sec)'); 
-legend("\Omega1", "\Omega2", "\Omega3",Location="best");
+xlabel('Time (sec)'); ylabel('Angular Velocity (rad/sec)');
+legend("\Omega1", "\Omega2", "\Omega3",Location="eastoutside");
 hold off; grid on;
