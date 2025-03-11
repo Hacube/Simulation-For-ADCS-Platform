@@ -74,7 +74,7 @@ J   = I_b + A_s*Inrt_s*A_s' + A_t*Inrt_t*A_t' + A_g*Inrt_g*A_g';
 
 % Control gains
 zeta = 0.70; % damping coefficient
-t_s  = 10;   % sec, settling time
+t_s  = 4;    % sec, settling time
 
 % w_n = 4.4/(t_s*zeta);
 w_n  = log(0.02*sqrt(1-zeta^2))/-zeta/t_s;
@@ -137,4 +137,20 @@ plot(out.tout, out.Omega(:,2), out.tout, out.Omega(:,3), out.tout, out.Omega(:,4
 title('Wheel Velocities in Spin Direction');
 xlabel('Time (sec)'); ylabel('Angular Velocity (rad/sec)');
 legend("\Omega1", "\Omega2", "\Omega3",Location="eastoutside");
+hold off; grid on;
+
+figure()
+subplot(2,1,1);hold on;
+plot(out.tout, out.w_C(:,2), out.tout, out.w_C(:,3), out.tout, out.w_C(:,4));
+title('Wheel Velocities in Spin Direction');
+ylabel('Angular Velocity (rad/sec)');
+legend("\Omega1", "\Omega2", "\Omega3",Location="eastoutside");
+hold off; grid on;
+
+subplot(2,1,2);hold on;
+plot(out.tout, out.T_dist(:,2), out.tout, out.T_dist(:,3), out.tout, out.T_dist(:,4));
+title('Disturbance Troque Applied');
+xlabel('Time (sec)'); ylabel('Torque (N-m)');
+ylim([-0.05 0.02]);
+legend("\tau1", "\tau2", "\tau3",Location="eastoutside");
 hold off; grid on;
