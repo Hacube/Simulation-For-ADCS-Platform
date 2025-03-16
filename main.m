@@ -56,7 +56,7 @@ A_g = [0 0 1;
        0 1 0];
 A_t = cross(A_g,A_s);
 
-%% Wheel to Body Inertia - P2
+%% Wheel to Body Inertia
 
 % Wheel space to body frame
 pos_b_w = pos_w*[1  0 -1  0;
@@ -111,11 +111,11 @@ disp(k_p)
 fprintf('The control gain k_d extended to each axis is: \n');
 disp(k_d)
 
-%% Simulate - P2
+%% Simulate
 
 out = sim('platform_model.slx');
 
-%% Plot Results - P2
+%% Plot Results
 
 figure()
 subplot(3,1,1); hold on;
